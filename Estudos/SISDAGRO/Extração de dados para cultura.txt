@@ -1,0 +1,21 @@
+Balanço Hídrico de Cultivo:
+- Emergência
+- Cultura
+- Estação
+- Solo
+- Cad: https://sisdagro.inmet.gov.br/sisdagro/app/solo/${ground_type}/${tilth_type}/getCadFinal.json
+
+Balanço Hídrico de Cultivo Irrigado
+- Emergência: DATA
+- Cultura: ID
+- Estação: ID
+- Solo: ID
+- Cad: https://sisdagro.inmet.gov.br/sisdagro/app/solo/${ground_type}/${tilth_type}/getCadFinal.json
+- Tipo de Lamina: 1 (fixa) - 0 (variavel)
+- Lamina de agua: VALOR (0-50)
+- Houve irrigação: 1 (sim) - 0 (não)
+
+Graus dia
+- Emergência: DATA
+- Cultura: ID
+- Estação: ID

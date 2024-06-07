@@ -1,0 +1,11 @@
+{
+	"Muitas nuvens com chuva isolada"
+	"Muitas nuvens com possibilidade de chuva isolada"
+	"Muitas nuvens com chuva isolada"
+	"Muitas nuvens"
+	"Nublado com pancadas de chuva"
+	"Muitas nuvens com pancadas de chuva isoladas"
+	"Muitas nuvens com pancadas de chuva e trovoadas isoladas"
+	"Poucas nuvens"
+	"Claro"
+}
