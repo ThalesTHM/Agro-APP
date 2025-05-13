@@ -1,13 +1,15 @@
 import { Text, View, ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
 import { useState, useEffect } from 'react'
 
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 
 import data from '../constants/data.js'
 import Tilth from '../services/sqlite/Tilth.js';
 import icons from '../constants/icons.js';
 
 export default function tilthQuery() {
+  const navigation = useNavigation()
+
   const [isLoaded, setisLoaded] = useState(false)
   const [tilthType, setTilthType] = useState('')
 
@@ -42,7 +44,11 @@ export default function tilthQuery() {
                     Tilth.remove(key)
                         .then(()=>{
                             alert(`Cultura ${tilthType} apagada com sucesso!`)
-                            router.replace('home')
+
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'index' }],
+                              });
                         })
                         .catch((error)=>{
                             alert(error)
@@ -151,7 +157,7 @@ export default function tilthQuery() {
                 </View>
                 <View className='h-1/3 absolute bottom-0'>
                     <Text className='text-base text-center'>
-                        Deletar a cultura
+                        Excluir a cultura
                     </Text>
                 </View>
             </View>

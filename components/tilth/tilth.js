@@ -3,11 +3,14 @@ import { ActivityIndicator, StyleSheet, Text, View, Image } from 'react-native'
 import AddNewTilth from './AddNewTilth'
 import Tilth from '../../services/sqlite/Tilth.js'
 import TilthList from './TilthList.js'
+import { useNavigation } from 'expo-router'
 
 const TilthComponent = () => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [haveTilth, setHaveTilth] = useState(false)
     const [tilthData, setTilthData] = useState([])
+
+    const navigation = useNavigation();
 
     useEffect(()=>{
         Tilth.all()
@@ -27,6 +30,28 @@ const TilthComponent = () => {
                 setIsLoaded(true)
             })
     }, [])
+
+    useEffect(() => {
+      navigation.addListener('focus', () => {
+        Tilth.all()
+            .then((tilthList)=>{
+                setIsLoaded(true)
+
+                if(tilthList.length > 0){
+                    setTilthData(tilthList)
+                    setHaveTilth(true)
+                } else {
+                    setHaveTilth(false)
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                setHaveTilth(false)
+                setIsLoaded(true)
+            })
+      });
+    }, [navigation]);
+
 
     if(!isLoaded){
         return(

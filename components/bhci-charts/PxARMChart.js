@@ -62,7 +62,7 @@ const BHCIPxARMChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 30, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 22, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 

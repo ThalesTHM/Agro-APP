@@ -69,13 +69,6 @@ export default function Bhci() {
             <TextInput 
               onChangeText={(text) => {
                 setLaminaAguaCleaner(text.replace(/[^0-9]/g, ''))
-
-                if(text > 50){
-                  alert('Insira um valor menor ou igual 50.')
-                  setLaminaAguaCleaner('')
-                  return
-                }
-
                 setLaminaAgua(text)
               }}
               keyboardType='numeric'

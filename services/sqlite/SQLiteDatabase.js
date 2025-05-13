@@ -1,6 +1,5 @@
 import * as SQLite from 'expo-sqlite'
 
-
-const db = SQLite.openDatabase('database.db')
+const db = SQLite.openDatabaseSync('database.db')
 
 export default db

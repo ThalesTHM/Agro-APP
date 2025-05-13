@@ -36,7 +36,7 @@ const FullWeather = () => {
         setDataRecieved(true)
       }).catch((error) => {
         console.log(data);
-        alert("Erro ao pegar a porra dos dados: " + error)
+        console.log("Erro ao pegar os dados: " + error)
       });
   }, [dataRecieved])
 
@@ -130,7 +130,7 @@ const FullWeather = () => {
     
     setWeatherDataFromDate().catch((error) => {
       console.log(data);
-      alert("Erro ao criar a porra da WeatherData: " + error)
+      console.log("Erro ao criar o WeatherData: " + error)
     })
 
     setWeatherDataDefined(true)

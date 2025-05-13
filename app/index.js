@@ -1,17 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button } from 'react-native';
-import { Link } from 'expo-router';
-import WeatherIcon from '../components/weather/weather-icons';
-import icons from '../constants/icons';
+import { Text, View, Button, Image } from 'react-native';
 import Weather from '../components/weather/weather';
 import TilthComponent from '../components/tilth/tilth';
 import CButton from '../components/custom-btn/CButton';
+import ExcelExportBtn from '../components/excel-export/ExcelExportBtn';
 
-export default function App() {
+const Home = () => {
   return (
     <View className='h-full pt-10'>
       <View className="items-center bg-white h-full">
-        <Text className="text-3xl">AgroAPP - TESTES</Text>
+        <Text className="text-3xl">AgroAPP</Text>
         <Weather/>
         <TilthComponent/>
         <CButton/>
@@ -19,3 +16,5 @@ export default function App() {
     </View>
   );
 }
+
+export default Home

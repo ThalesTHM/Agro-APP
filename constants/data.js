@@ -217,6 +217,10 @@ groundData = [
 
 const BHCDMOptions = [
     {
+        "key": "Exportar",
+        "value": "Início"
+    },
+    {
         "key": "ARM",
         "value": "Armazenamento (%)"
     },
@@ -323,8 +327,8 @@ BHCOptions = [
         "key": "Resumo"
     },
     {
-        "value": "Temperaturas (° Celsius)",
-        "key": "T"
+        "value": "Coeficiente de cultura",
+        "key": "Kc"
     },
     {
         "value": "Precipitação (mm)",
@@ -339,16 +343,20 @@ BHCOptions = [
         "key": "ARM"
     },
     {
-        "value": "Evapotranspiração de Cultura (mm) x Evapotranspiração Real da Cultura (mm)",
-        "key": "ETcxETr"
-    },
-    {
         "value": "Deficiência Hídrica (mm)",
         "key": "DEF"
     },
     {
         "value": "Excedente Hídrico (mm)",
         "key": "EXC"
+    },
+    {
+        "value": "Evapotranspiração de Cultura (mm) x Evapotranspiração Real da Cultura (mm)",
+        "key": "ETcxETr"
+    },
+    {
+        "value": "Temperaturas (° Celsius)",
+        "key": "T"
     },
     {
         "value": "Produtividade Relativa e Perda de Produtividade Relativa decorrentes da deficiência hidrica (%)",
@@ -377,10 +385,6 @@ BHCOptions = [
     {
         "value": "Deficiência Hídrica (mm) x Excedente Hídrico (mm)",
         "key": "DEFxEXC"
-    },
-    {
-        "value": "Coeficiente de cultura",
-        "key": "Kc"
     }
 ]
 
@@ -390,8 +394,8 @@ BHCIOptions = [
         "key": "Resumo"
     },
     {
-        "value": "Temperaturas (° Celsius)",
-        "key": "T"
+        "value": "Coeficiente de cultura",
+        "key": "Kc"
     },
     {
         "value": "Precipitação (mm)",
@@ -406,16 +410,20 @@ BHCIOptions = [
         "key": "ARM"
     },
     {
-        "value": "Evapotranspiração de Cultura (mm) x Evapotranspiração Real da Cultura (mm)",
-        "key": "ETcxETr"
-    },
-    {
         "value": "Deficiência Hídrica (mm)",
         "key": "DEF"
     },
     {
         "value": "Excedente Hídrico (mm)",
         "key": "EXC"
+    },
+    {
+        "value": "Evapotranspiração de Cultura (mm) x Evapotranspiração Real da Cultura (mm)",
+        "key": "ETcxETr"
+    },
+    {
+        "value": "Temperatura (° Celsius)",
+        "key": "T"
     },
     {
         "value": "Produtividade Relativa e Perda de Produtividade Relativa decorrentes da deficiência hidrica (%)",
@@ -444,10 +452,6 @@ BHCIOptions = [
     {
         "value": "Deficiência Hídrica (mm) x Excedente Hídrico (mm)",
         "key": "DEFxEXC"
-    },
-    {
-        "value": "Coeficiente de cultura",
-        "key": "Kc"
     },
     {
         "value": "Precipitação (mm) x Armazenamento (mm) x Irrigação",

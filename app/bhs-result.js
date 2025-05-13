@@ -15,6 +15,8 @@ import BHSCADxARMChart from '../components/bhs-charts/CADxARMChart';
 import BHSDEFxEXCChart from '../components/bhs-charts/DEFxEXCChart';
 import BHSPxARMChart from '../components/bhs-charts/PxARMChart';
 import BHSETRxTChart from '../components/bhs-charts/ETRxTChart';
+import ExcelExportBtn from '../components/excel-export/ExcelExportBtn';
+import ChartsHintBtn from '../components/charts-hint-btn/chartsHintBtn';
 
 export default function App() {
   const params = useLocalSearchParams()
@@ -28,16 +30,39 @@ export default function App() {
 
   const [option, setOption] = useState('Resumo')
 
+  const [excelData, setExcelData] = useState()
+
+  const getExcelData = async (result) => {
+    return result.map((item) => {
+      return {
+        "Data": item.data,
+        "Armazenamento (ARM) (mm)": item.arm,
+        "Alteração (ALT)": item.alteracao,
+        "Evapotranspiração Real da Cultura (ETr) (mm)": item.etr,
+        "Deficiência Hídrica (DEF) (mm)": item.deficit,
+        "Excedente Hídrico (EXC) (mm)": item.excesso,
+        "Evapotranspiração de Referência (ETo) (mm)": item.etp,
+        "Precipitação (P) (mm)": item.precipitacao,
+        "Temperatura (T) (°C)": item.temperatura
+      }
+    })
+  }
+
   useEffect(()=>{
     const requestOptions = {
         method: "POST",
         redirect: "follow"
       };
       
-    fetch(`https://sisdagro.inmet.gov.br/sisdagro/app/monitoramento/bhs.json?dataInicial=${startDate}&dataFinal=${endDate}&estacaoId=4325121560435000001&soloId=${groundType}`, requestOptions)
+    fetch(`https://sisdagro.inmet.gov.br/sisdagro/app/monitoramento/bhs.json?dataInicial=${startDate}&dataFinal=${endDate}&estacaoId=4300121000621400001&soloId=${groundType}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
         setData(result.bhs)
+
+        getExcelData(result.bhs)
+        .then(translatedData => setExcelData(translatedData))
+        .catch(err => console.log(err))
+        
         setIsLoaded(true)
     })
     .catch((error) => console.error(error));
@@ -64,7 +89,7 @@ export default function App() {
         </View>
         {option == 'Resumo' && (
             <ScrollView>
-                <View className='w-full h-full'>
+                <View className='w-full h-full items-center justify-center'>
                 <View className='flex-row items-center justify-center'>
                     <View className='h-48 w-36 border-2 border-navyblue rounded justify-center items-center flex flex-column m-5' >
                         <View className='h-3/5 justify-center items-center'>
@@ -126,6 +151,7 @@ export default function App() {
                         </View>
                     </View>
                 </View>
+              <ExcelExportBtn title={`Balanço Hídrico Sequencial`} data={excelData} />
             </View>
             </ScrollView>
         )}
@@ -139,6 +165,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'p' && (
@@ -151,6 +178,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETo' && (
@@ -163,6 +191,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ARM' && (
@@ -175,6 +204,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ALT' && (
@@ -187,6 +217,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETR' && (
@@ -199,6 +230,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'DEF' && (
@@ -211,6 +243,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'EXC' && (
@@ -223,6 +256,7 @@ export default function App() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'CADxARM' && (
@@ -230,7 +264,7 @@ export default function App() {
                 <BHSCADxARMChart
                     data={data.map((item) => {
                         return {
-                            valorCad: 100,
+                            valorCad: item.cad,
                             valorArm: item.arm,
                             data: item.data
                         }
@@ -244,6 +278,7 @@ export default function App() {
                         <Text className='text-base'>Armazenamento</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'DEFxEXC' && (
@@ -265,6 +300,7 @@ export default function App() {
                     <Text className='text-xl text-white'>Excedente hídrico</Text>
                 </View>
             </View>
+            <ChartsHintBtn/>
         </View>
         )}
         {option == 'PxARM' && (
@@ -286,6 +322,7 @@ export default function App() {
                         <Text className='text-xl'>Armazenamento</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETRxT' && (
@@ -299,14 +336,15 @@ export default function App() {
                         }
                     })}
                 />
-                <View className='justify-center items-center flex-row mt-5'>
-                    <View className='bg-[#FFFF00] rounded-lg w-42 items-center m-2'>
-                        <Text className='text-base'>Evapotranspiração Real</Text>
+                <View className='justify-center items-center flex-col mt-5'>
+                    <View className='bg-[#006400] rounded-lg w-48 items-center m-2'>
+                        <Text className='text-base text-white'>Evapotranspiração Real</Text>
                     </View>
-                    <View className='bg-[#FF0000] rounded-lg w-40 items-center m-2'>
-                        <Text className='text-base'>Temperatura Média</Text>
+                    <View className='bg-[#0000FF] rounded-lg w-40 items-center m-2'>
+                        <Text className='text-base text-white'>Temperatura Média</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
     </View>

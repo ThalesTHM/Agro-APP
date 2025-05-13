@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from 'react-native'
-import { useLocalSearchParams, Link } from "expo-router"
+import { useLocalSearchParams, Link, useNavigation } from "expo-router"
 import React, { useEffect, useState } from 'react'
 import WeatherIcon from './weather-icons.js'
 import getIconName from './src/weather-icon-type.js'
@@ -116,7 +116,7 @@ const Weather = () => {
     
     setWeatherDataArray().catch((error) => {
       console.log(data);
-      alert('Erro ao pegar ao criar a porra da WeatherData: ' + error)
+      console.log('Erro ao criar a WeatherData: ' + error)
     })
 
     setWeatherDataDefined(true)

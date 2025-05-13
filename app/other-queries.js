@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Text, View, Button, TouchableOpacity } from 'react-native';
+import { Text, View, Button, TouchableOpacity, Alert } from 'react-native';
 
 export default function OtherQueries() {
   return (
@@ -26,7 +26,26 @@ export default function OtherQueries() {
             </View>
         </TouchableOpacity>
         <TouchableOpacity 
-            onPress={()=>router.navigate('dams-form')}
+            onPress={()=>{
+                Alert.alert(
+                    'Aviso', 
+                    `Os dados coletados dessa ferramenta são da estação de Coronel Pacheco e podem estar incorretos. Deseja prosseguir mesmo assim?`,
+                    [
+                        {
+                            text: 'Sim',
+                            onPress: () => {
+                                router.navigate('dams-form')
+                            }
+                        },
+                        {
+                            text: 'Não'
+                        }
+                    ],
+                    {
+                        cancelable: true
+                    }
+                )
+            }}
             className='h-full w-2/5 ml-3 mr-3 justify-center items-center'
         >
         <View className='h-full w-full border-2 border-navyblue justify-center items-center rounded-lg m-5 bg-lighterblue'>

@@ -62,7 +62,7 @@ const BHCIDEFxPerdaChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 30, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 22, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 
@@ -100,7 +100,7 @@ const BHCIDEFxPerdaChart = ({data}) => {
                         <Line
                             points={points.valorPerda}
                             chartBounds={chartBounds}
-                            color='lime'
+                            color='#FFFF00'
                             strokeWidth={3}
                         />
                         <Area

@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Button, ActivityIndicator } from 'react-native';
+import { Text, View, Button, ActivityIndicator, Image, Touchable, TouchableOpacity } from 'react-native';
 import BHCDMPChart from '../components/bhcdm-charts/PChart';
 import BHCDMEToChart from '../components/bhcdm-charts/EToChart';
 import BHCDMARMChart from '../components/bhcdm-charts/ARMChart';
@@ -14,24 +14,52 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import constantData from '../constants/data';
 import BHCDMPxTChart from '../components/bhcdm-charts/PxTChart';
 import BHCDMTChart from '../components/bhcdm-charts/TChart';
+import icons from '../constants/icons';
+import ChartsHintBtn from '../components/charts-hint-btn/chartsHintBtn';
+import ExcelExportBtn from '../components/excel-export/ExcelExportBtn';
 
 
 export default function App() {
   const params = useLocalSearchParams()
   const dateType = params.dateType
+  
+  const months = [
+    'Jan', 'Fev', 'Mar',
+    'Abr', 'Mai', 'Jun',
+    'Jul', 'Ago', 'Set',
+    'Out', 'Nov', 'Dez'
+  ]
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [data, setData] = useState([])
 
-  const [option, setOption] = useState('ARM')
+  const [option, setOption] = useState('Exportar')
+
+  const [excelData, setExcelData] = useState()
+
+  const getExcelData = async (result) => {
+    return result.map((item) => {
+      return {
+        "Data": (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1]))),
+        "Armazenamento (ARM) (mm)": item.arm,
+        "Alteração (ALT)": item.alteracao,
+        "Evapotranspiração Real da Cultura (ETr) (mm)": item.etr,
+        "Deficiência Hídrica (DEF) (mm)": item.deficit,
+        "Excedente Hídrico (EXC) (mm)": item.excesso,
+        "Evapotranspiração de Referência (ETo) (mm)": item.etp,
+        "Precipitação (P) (mm)": item.precipitacao,
+        "Temperatura (T) (°C)": item.temperatura
+      }
+    })
+  }
 
   useEffect(()=>{
     let url = ''
 
     if(dateType == 1)
-        url = 'https://sisdagro.inmet.gov.br/sisdagro/app/climatologia/bhclimatologicomensal/bhcnm?estacaoId=4325121560435000001'
+        url = 'https://sisdagro.inmet.gov.br/sisdagro/app/climatologia/bhclimatologicomensal/bhcnm?estacaoId=4300121000621400001'
     else
-        url = 'https://sisdagro.inmet.gov.br/sisdagro/app/climatologia/bhclimatologiconormal/bhcn?estacaoId=4325121560435000001'
+        url = 'https://sisdagro.inmet.gov.br/sisdagro/app/climatologia/bhclimatologiconormal/bhcn?estacaoId=4300121000621400001'
 
     fetch(url, {
         "headers": {
@@ -43,6 +71,11 @@ export default function App() {
         .then(res => res.json())
         .then((result) => {
             setData(result.bhs)
+            
+            getExcelData(result.bhs)
+            .then(translatedData => setExcelData(translatedData))
+            .catch(err => console.log(err))
+
             setIsLoaded(true)
         })
         .catch(error => console.error(error))
@@ -51,6 +84,7 @@ export default function App() {
   if(!isLoaded){
     return (
         <View className='h-full w-full bg-lightblue justify-center items-center'>
+            <Stack.Screen options={{title: 'Balanço Hídrico Climático ' + (dateType == 1 ? 'Mensal' : 'Decendial')}}/>
             <ActivityIndicator size='large'/>
         </View>
     )
@@ -58,6 +92,7 @@ export default function App() {
 
   return (
     <View className='h-full w-full bg-lightblue'>
+        <Stack.Screen options={{title: 'Balanço Hídrico Climático ' + (dateType == 1 ? 'Mensal' : 'Decendial')}}/>
         <View>
             <SelectList
                 placeholder='Selecione uma forma de visualizar os dados'
@@ -67,16 +102,35 @@ export default function App() {
                 save="key"
                 />
         </View>
+        {option == 'Exportar' && (
+            <View className='w-full h-full mt-10'>
+                <View className='w-full h-3/5 items-center'>
+                <View>
+                    <Image
+                    source={icons.bulb}
+                    />
+                </View>
+                <View className='mt-10 w-4/5'>
+                    <Text className='text-2xl font-bold'>Selecione acima uma opção de visualização de dados. Caso queira exportar os dados para excel, pressione o botão abaixo.</Text>
+                </View>
+                </View>
+                <View className='w-full items-center'>
+                    <ExcelExportBtn title={`Balanço Hídrico Cli. ${dateType == 1 ? 'Mensal' : 'Decendial'}`} data={excelData}/>
+                </View>
+            </View>
+        )}
         {option == 'T' && (
             <View className='w-full h-full'>
                 <BHCDMTChart
                     data={data.map((item) => {
                         return {
                             valor: item.temperatura,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'P' && (
@@ -85,10 +139,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.precipitacao,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETo' && (
@@ -97,10 +153,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.etp,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ARM' && (
@@ -109,10 +167,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.arm,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ALT' && (
@@ -121,10 +181,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.alteracao,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETr' && (
@@ -133,10 +195,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.etr,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'DEF' && (
@@ -145,10 +209,12 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: -item.deficit,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'EXC' && (
@@ -157,23 +223,25 @@ export default function App() {
                     data={data.map((item) => {
                         return {
                             valor: item.excesso,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'PxT' && (
             <View className='w-full h-full'>
-  
                 <BHCDMPxTChart
                     data={data.map((item) => {
                         return {
                             valorT: item.temperatura,
                             valorP: item.precipitacao,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
                 <View className='justify-center items-center flex-row mt-5'>
                     <View className='bg-[#0000FF] rounded-lg w-32 items-center m-2'>
@@ -183,6 +251,7 @@ export default function App() {
                         <Text className='text-xl'>Temperatura Média</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'DEFxEXC' && (
@@ -192,9 +261,10 @@ export default function App() {
                     return {
                         valorExc: item.excesso,
                         valorDef: item.deficit,
-                        data: item.data
+                        data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                     }
                 })}
+                dateType={dateType}
             />
             <View className='justify-center items-center flex-col mt-5'>
                 <View className='bg-[#FF0000] rounded-lg w-40 items-center m-2'>
@@ -204,6 +274,7 @@ export default function App() {
                     <Text className='text-xl text-white'>Excedente hídrico</Text>
                 </View>
             </View>
+            <ChartsHintBtn/>
         </View>
         )}
         {option == 'PxARM' && (
@@ -213,9 +284,10 @@ export default function App() {
                         return {
                             valorP: item.precipitacao,
                             valorArm: item.arm,
-                            data: item.data
+                            data: (dateType == 1 ? months[Number(item.data.split('/')[1]) - 1] : ((item.data.split('/')[0]) + '/' + (item.data.split('/')[1])))
                         }
                     })}
+                    dateType={dateType}
                 />
                 <View className='justify-center items-center flex-row mt-5'>
                     <View className='bg-[#FFFF00] rounded-lg w-32 items-center m-2'>
@@ -225,27 +297,7 @@ export default function App() {
                         <Text className='text-xl'>Armazenamento</Text>
                     </View>
                 </View>
-            </View>
-        )}
-        {option == 'ETRxT' && (
-            <View className='w-full h-full'>
-                <BHCDMETRxTChart
-                    data={data.map((item) => {
-                        return {
-                            valorT: item.temperatura,
-                            valorEtr: item.etr,
-                            data: item.data
-                        }
-                    })}
-                />
-                <View className='justify-center items-center flex-row mt-5'>
-                    <View className='bg-[#FFFF00] rounded-lg w-42 items-center m-2'>
-                        <Text className='text-base'>Evapotranspiração Real</Text>
-                    </View>
-                    <View className='bg-[#FF0000] rounded-lg w-40 items-center m-2'>
-                        <Text className='text-base'>Temperatura Média</Text>
-                    </View>
-                </View>
+                <ChartsHintBtn/>
             </View>
         )}
     </View>

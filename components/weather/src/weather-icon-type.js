@@ -57,6 +57,10 @@ const getIconName = (state) => {
         case 'Muitas nuvens com nevoeiro':
             return icons.cloudy
             break;
+
+        case 'Poucas nuvens com nevoeiro ou névoa úmida':
+            return icons.cloudy
+            break;
     
         default:
             return icons.error

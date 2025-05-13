@@ -9,7 +9,7 @@ import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated
 Animated.addWhitelistedNativeProps({ text: true })
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
-const BHCDMEFxEXCChart = ({data}) => {
+const BHCDMEFxEXCChart = ({data, dateType}) => {
     const font = useFont(inter, 9);
 
     const {state, isActive} = useChartPressState({x: 0, y: {valorDef: 0, valorExc: 0}})
@@ -57,7 +57,7 @@ const BHCDMEFxEXCChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 26, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 24, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 
@@ -86,7 +86,7 @@ const BHCDMEFxEXCChart = ({data}) => {
                 chartPressState={[state]}
                 xKey="data"
                 yKeys={["valorDef", "valorExc"]}
-                axisOptions={{ font:font, formatXLabel: (value) => '', formatYLabel: (value) => `${value}` }}
+                axisOptions={{ font:font, formatXLabel: (value) => (dateType == 1 ? `${value}` : ''), formatYLabel: (value) => `${value}` }}
                 >
                     {({points, chartBounds}) => (
                         <>

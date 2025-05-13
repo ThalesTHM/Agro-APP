@@ -92,7 +92,7 @@ const BHSARMChart = ({data}) => {
                 xKey="data"
                 yKeys={["valor"]}
                 axisOptions={{ font:font, formatXLabel: (value) => '', formatYLabel: (value) => `${value}` }}
-                domainPadding={{left:50, right:50}}
+                domainPadding={{left:50, right:50, top: 10}}
                 
                 >
                     {({points, chartBounds}) => (

@@ -8,6 +8,7 @@ import TilthComponent from '../components/tilth/tilth';
 import CButton from '../components/custom-btn/CButton';
 import { useEffect, useState } from 'react';
 import CtbChart from '../components/ctb-chart/Chart';
+import ChartsHintBtn from '../components/charts-hint-btn/chartsHintBtn';
 
 const ConfortoTermicoBovinoResult = () => {
   const params = useLocalSearchParams()
@@ -24,7 +25,7 @@ const ConfortoTermicoBovinoResult = () => {
       "accept": "*/*",
       "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
     },
-    "body": `dataInicial=${startDate}&dataFinal=${endDate}&estacaoId=4325121560435000001`,
+    "body": `dataInicial=${startDate}&dataFinal=${endDate}&estacaoId=4300121000621400001`,
     "method": "POST",
   })
       .then((response) => response.json())
@@ -63,6 +64,7 @@ const ConfortoTermicoBovinoResult = () => {
             <Text className='text-base'>Atenção</Text>
         </View>
       </View>
+      <ChartsHintBtn/>
     </View>
   );
 }

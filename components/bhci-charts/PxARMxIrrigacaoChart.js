@@ -103,11 +103,11 @@ const BHCIPxARMxIrrigacaoChart = ({data}) => {
                             >
                                 <BarGroup.Bar
                                     points={points.valorP}
-                                    color="green"
+                                    color="yellow"
                                 />
                                 <BarGroup.Bar
                                     points={points.valorL}
-                                    color="yellow"
+                                    color="green"
                                 />
                             </BarGroup>
                             <Line

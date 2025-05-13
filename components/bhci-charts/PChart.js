@@ -91,7 +91,7 @@ const BHCIPChart = ({data}) => {
                 chartPressState={[state]}
                 xKey="data"
                 yKeys={["valor"]}
-                axisOptions={{ font:font, formatXLabel: (value) => `${value}`, formatYLabel: (value) => `${value}` }}
+                axisOptions={{ font:font, formatXLabel: (value) => '', formatYLabel: (value) => `${value}` }}
                 domainPadding={{left:50, right:50}}
                 
                 >
@@ -99,7 +99,7 @@ const BHCIPChart = ({data}) => {
                         <Bar
                             points={points.valor}
                             chartBounds={chartBounds}
-                            color="red"
+                            color="yellow"
                             animate={{ type: "timing", duration: 300 }}
                         />
                     )

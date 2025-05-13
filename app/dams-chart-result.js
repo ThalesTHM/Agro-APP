@@ -8,6 +8,7 @@ import TilthComponent from '../components/tilth/tilth';
 import CButton from '../components/custom-btn/CButton';
 import { useEffect, useState } from 'react';
 import DamsResultChart from '../components/dams-chart/Chart';
+import ChartsHintBtn from '../components/charts-hint-btn/chartsHintBtn';
 
 const DamsResult = () => {
   const params = useLocalSearchParams()
@@ -26,7 +27,7 @@ const DamsResult = () => {
         "accept": "*/*",
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      "body": `probabilidade=${probabilidade}&praticaAgricola=${praticaAgricola}&dataInicial=${startDate}&estacaoId=4325121560435000001&dataPlantio=04%2F05%2F2024&soloId&cad&culturaId`,
+      "body": `probabilidade=${probabilidade}&praticaAgricola=${praticaAgricola}&dataInicial=${startDate}&estacaoId=4325121560435000001&dataPlantio&soloId&cad&culturaId`,
       "method": "POST"
     })
       .then((response) => response.json())
@@ -49,6 +50,7 @@ const DamsResult = () => {
   return (
     <View className='h-full w-full bg-lightblue'>
         <DamsResultChart data={data.filter((item) => item.mes == month).map((item) => ({valor: item.valorDia, diasAptos: item.posicaoDia}))}/>
+        <ChartsHintBtn/>
     </View>
   );
 }

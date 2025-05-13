@@ -2,7 +2,7 @@
   "expo": {
     "name": "AgroAPP - TESTES",
     "slug": "AgroAPP",
-    "scheme": "AgroAPP - TESTES",
+    "scheme": "demo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "teste.agro.app"
+      "package": "teste.agro.app",
+      "permissions": ["android.permission.WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

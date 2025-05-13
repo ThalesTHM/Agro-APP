@@ -19,6 +19,8 @@ import BHCETcxTChart from '../components/bhc-charts/ETcxTChart';
 import BHCKcChart from '../components/bhc-charts/KcChart';
 import BHCDEFxPerdaChart from '../components/bhc-charts/DEFxPerdaChart';
 import BHCARMxPerdaChart from '../components/bhc-charts/ARMxPerdaChart';
+import ExcelExportBtn from '../components/excel-export/ExcelExportBtn';
+import ChartsHintBtn from '../components/charts-hint-btn/chartsHintBtn';
 
 export default function Bhc() {
   const params = useLocalSearchParams()
@@ -36,6 +38,33 @@ export default function Bhc() {
   const [textData, setTextData] = useState([])
 
   const [option, setOption] = useState('Resumo')
+
+  const [excelData, setExcelData] = useState()
+
+  const getExcelData = async (result) => {
+    return result.map((item) => {
+      return {
+        "Data": item.data,
+        "Evapotranspiração de Referência (ETo) (mm)": item.etp,
+        "Coeficiente de Cultura (Kc)": item.kc,
+        "Evapotranspiração de Cultura (ETc) (mm)": item.etc,
+        "Precipitação (P) (mm)": item.precipitacao,
+        "P - ETc": item.p_etc,
+        "Armazenamento (ARM) (mm)": item.arm,
+        "Alteração (ALT)": item.alteracao,
+        "Evapotranspiração Real da Cultura (ETr) (mm)": item.etr,
+        "Perda (%)": item.penalidadeAcumulada,
+        "Produtividade (%)": item.produtividadeResume,
+        "Temperatura (T) (°C)": item.temperatura,
+        "Capacidade de Água Disponível (CAD) (mm)": item.cad,
+        "ETr / ETc": item.etrcetpc,
+        "Deficiência Hídrica (DEF) (mm)": item.deficit,
+        "Excedente Hídrico (EXC) (mm)": item.excesso,
+        "Temperatura Máxima (°C)": item.tmax,
+        "Temperatura Mínima (°C)": item.tmin
+      }
+    })
+  }
 
   useEffect(()=>{
     Tilth.find(key)
@@ -77,10 +106,14 @@ export default function Bhc() {
       redirect: "follow"
     };
     
-    fetch(`https://sisdagro.inmet.gov.br/sisdagro/app/monitoramento/bhc.json?dataPlantio=${tilthData.tilth_start_date}&culturaId=${tilthData.tilth_type}&estacaoId=4325121560435000001&soloId=${Math.trunc(tilthData.ground_type)}&cad=${cad}`, requestOptions)
+    fetch(`https://sisdagro.inmet.gov.br/sisdagro/app/monitoramento/bhc.json?dataPlantio=${tilthData.tilth_start_date}&culturaId=${tilthData.tilth_type}&estacaoId=4300121000621400001&soloId=${Math.trunc(tilthData.ground_type)}&cad=${cad}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setData(result.bhc)
+
+        getExcelData(result.bhc)
+          .then(translatedData => setExcelData(translatedData))
+          .catch(err => console.log(err))
 
         setTextData([
           {
@@ -226,6 +259,7 @@ export default function Bhc() {
               </View>
             </View>
           </View>
+          <ExcelExportBtn title={`Balanço Hídrico de Cultivo`} data={excelData} />
         </View>
       </ScrollView>
       )}
@@ -252,6 +286,9 @@ export default function Bhc() {
                       <Text className='text-xl text-white'>Temperatura mínima</Text>
                   </View>
               </View>
+              <View className='mt-[-40px]'>
+                <ChartsHintBtn/>
+              </View>
             </View>
         )}
         {option == 'P' && (
@@ -264,6 +301,7 @@ export default function Bhc() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETo' && (
@@ -276,6 +314,7 @@ export default function Bhc() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ARM' && (
@@ -288,6 +327,7 @@ export default function Bhc() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETcxETr' && (
@@ -308,6 +348,9 @@ export default function Bhc() {
                   <View className='bg-[#0000FF] rounded-lg w-64 items-center m-2'>
                       <Text className='text-base text-white'>Evapotranspiração real da cultura</Text>
                   </View>
+                </View>
+                <View className='mt-[-20px]'>
+                  <ChartsHintBtn/>
                 </View>
             </View>
         )}
@@ -330,6 +373,9 @@ export default function Bhc() {
                       <Text className='text-xl'>Perda acumulada</Text>
                   </View>
                 </View>
+                <View className='mt-[-20px]'>
+                  <ChartsHintBtn/>
+                </View>
             </View>
         )}
         {option == 'DEF' && (
@@ -342,6 +388,7 @@ export default function Bhc() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'Kc' && (
@@ -354,6 +401,7 @@ export default function Bhc() {
                       }
                   })}
               />
+              <ChartsHintBtn/>
           </View>
         )}
         {option == 'EXC' && (
@@ -366,6 +414,7 @@ export default function Bhc() {
                         }
                     })}
                 />
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'CADxARM' && (
@@ -386,6 +435,9 @@ export default function Bhc() {
                     <View className='bg-[#FF0000] rounded-lg w-32 items-center m-2'>
                         <Text className='text-base'>Armazenamento</Text>
                     </View>
+                </View>
+                <View className='mt-[-20px]'>
+                  <ChartsHintBtn/>
                 </View>
             </View>
         )}
@@ -408,6 +460,9 @@ export default function Bhc() {
                     <Text className='text-xl text-white'>Excedente hídrico</Text>
                 </View>
             </View>
+            <View className='mt-[-20px]'>
+              <ChartsHintBtn/>
+            </View>
         </View>
         )}
         {option == 'PxARM' && (
@@ -429,6 +484,7 @@ export default function Bhc() {
                         <Text className='text-xl'>Armazenamento</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
         {option == 'ETcxT' && (
@@ -450,6 +506,9 @@ export default function Bhc() {
                         <Text className='text-base text-white'>Temperatura média</Text>
                     </View>
                 </View>
+                <View className='mt-[-20px]'>
+                  <ChartsHintBtn/>
+                </View>
             </View>
         )}
         {option == 'DEFxPERDA' && (
@@ -463,13 +522,16 @@ export default function Bhc() {
                         }
                     })}
                 />
-                <View className='justify-center items-center flex-row mt-5'>
-                    <View className='bg-[#FFFF00] rounded-lg w-14 items-center m-2'>
-                        <Text className='text-base'>Perda</Text>
-                    </View>
+                <View className='justify-center items-center flex-col mt-5'>
                     <View className='bg-[#FF0000] rounded-lg w-40 items-center m-2'>
                         <Text className='text-base'>Deficiência hídrica</Text>
                     </View>
+                    <View className='bg-[#FFFF00] rounded-lg w-36 items-center m-2'>
+                        <Text className='text-base'>Perda acumulada</Text>
+                    </View>
+                </View>
+                <View className='mt-[-20px]'>
+                  <ChartsHintBtn/>
                 </View>
             </View>
         )}
@@ -484,14 +546,15 @@ export default function Bhc() {
                         }
                     })}
                 />
-                <View className='justify-center items-center flex-col mt-5'>
-                    <View className='bg-[#006400] rounded-lg w-64 items-center m-2'>
-                        <Text className='text-base text-white'>Capacidade de água disponível</Text>
+                <View className='justify-center items-center flex-row mt-5'>
+                    <View className='bg-[#006400] rounded-lg w-36 items-center m-2'>
+                        <Text className='text-base text-white'>Perda acumulada</Text>
                     </View>
-                    <View className='bg-[#0000FF] rounded-lg w-32 items-center m-2'>
+                    <View className='bg-[#0000FF] rounded-lg w-36 items-center m-2'>
                         <Text className='text-base text-white'>Armazenamento</Text>
                     </View>
                 </View>
+                <ChartsHintBtn/>
             </View>
         )}
     </View>

@@ -71,7 +71,7 @@ const BHCIProdutividadeChart = ({data}) => {
 
             {!isActive && (
             <View style={{height: 100}}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: "#000" }}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', color: "#000" }}>
                     Produtividade {data[0]['valorProdutividade'].toFixed(2)}% - Perda acumulada {data[0]['valorPerda'].toFixed(2)}%
                 </Text>
                 <Text>

@@ -57,7 +57,7 @@ const BHCIETcxETrChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 26, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 24, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 

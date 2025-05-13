@@ -62,7 +62,7 @@ const BHSETRxTChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 30, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 26, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 
@@ -92,20 +92,20 @@ const BHSETRxTChart = ({data}) => {
                 xKey="data"
                 yKeys={["valorEtr", "valorT"]}
                 axisOptions={{ font:font, formatXLabel: (value) => '', formatYLabel: (value) => `${value}` }}
-                domainPadding={{top:10}}
+                domainPadding={{top:10, bottom: 10, left: 10, right: 10}}
                 >
                     {({points, chartBounds}) => (
                         <>
                             <Line
                                 strokeWidth={3}
                                 points={points.valorEtr}
-                                color="red"
+                                color="#006400"
                                 animate={{ type: "timing", duration: 300 }}
                             />
                             <Line
                                 strokeWidth={3}
                                 points={points.valorT}
-                                color="yellow"
+                                color="#0000FF"
                                 animate={{ type: "timing", duration: 300 }}
                             />
                         </>

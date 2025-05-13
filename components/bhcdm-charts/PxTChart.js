@@ -9,7 +9,7 @@ import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated
 Animated.addWhitelistedNativeProps({ text: true })
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
-const BHCDMPxTChart = ({data}) => {
+const BHCDMPxTChart = ({data, dateType}) => {
     const font = useFont(inter, 9);
 
     const {state, isActive} = useChartPressState({x: 0, y: {valorT: 0, valorP: 0}})
@@ -86,7 +86,7 @@ const BHCDMPxTChart = ({data}) => {
                 chartPressState={[state]}
                 xKey="data"
                 yKeys={["valorT", "valorP"]}
-                axisOptions={{ font:font, formatXLabel: (value) => '', formatYLabel: (value) => `${value}` }}
+                axisOptions={{ font:font, formatXLabel: (value) => (dateType == 1 ? `${value}` : ''), formatYLabel: (value) => `${value}` }}
                 >
                     {({points, chartBounds}) => (
                         <>

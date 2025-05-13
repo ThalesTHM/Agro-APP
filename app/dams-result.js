@@ -7,6 +7,7 @@ import Weather from '../components/weather/weather';
 import TilthComponent from '../components/tilth/tilth';
 import CButton from '../components/custom-btn/CButton';
 import { useEffect, useState } from 'react';
+import ExcelExportBtn from '../components/excel-export/ExcelExportBtn';
 
 const DamsResult = () => {
   const params = useLocalSearchParams()
@@ -17,6 +18,19 @@ const DamsResult = () => {
 
   const [data, setData] = useState({})
   const [isLoaded, setIsLoaded] = useState(false)
+
+  const [excelData, setExcelData] = useState()
+
+  const getExcelData = async (result) => {
+    return result.map((item) => {
+      return {
+        "Mês": item.mes, 
+        "Decêndio": item.decendio, 
+        "Dias Aptos": item.posicaoDia, 
+        "Porcentagem Dias Aptos": item.valorDia, 
+      }
+    })
+  }
 
   const getRgb = (val) => {
     var r = parseInt(180-(250*val/100));
@@ -42,6 +56,11 @@ const DamsResult = () => {
       .then((response) => response.json())
       .then((result) => {
         setData(result['bhc'])
+
+        getExcelData(result.bhc)
+        .then(translatedData => setExcelData(translatedData))
+        .catch(err => console.log(err))
+
         setIsLoaded(true)
       })
       .catch((error) => console.error(error));
@@ -69,8 +88,11 @@ const DamsResult = () => {
   }
 
   return (
-    <View className='h-full w-full'>
-      <View className='flex-1 px-[20px] py-[20px] bg-lightblue'>
+    <View className='h-full w-full bg-lightblue'>
+      <View className='h-fit w-full items-center'>
+        <ExcelExportBtn title='Dias Aptos de Manejo de Solo' data={excelData} />
+      </View>
+      <View className='flex-1 px-[20px] py-[20px] mt-[-25px]'>
         <View className='px-[10px] py-[12px] rounded-lg mb-[15px] bg-[#6AB7E2]' style={{elevation: 2}}>
           <Text className='text-[#fff]'>Probabilidade</Text>
         </View>

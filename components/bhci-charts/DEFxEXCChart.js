@@ -57,7 +57,7 @@ const BHCIDEFxEXCChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 26, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 22, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 

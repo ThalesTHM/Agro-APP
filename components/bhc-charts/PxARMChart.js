@@ -62,7 +62,7 @@ const BHCPxARMChart = ({data}) => {
                 <AnimatedTextInput
                 editable={false}
                 underlineColorAndroid={"transparent"}
-                style={{ fontSize: 30, fontWeight: 'bold', color: "#000" }}
+                style={{ fontSize: 22, fontWeight: 'bold', color: "#000" }}
                 animatedProps={animatedText}
                 />
 
@@ -102,7 +102,7 @@ const BHCPxARMChart = ({data}) => {
                                 color="yellow"
                             />
                             <Line
-                                strokeWidth={3}
+                                strokeWidth={2}
                                 points={points.valorArm}
                                 chartBounds={chartBounds}
                                 color="red"

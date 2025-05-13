@@ -4,15 +4,17 @@ import  RNDateTimePicker  from '@react-native-community/datetimepicker'
 import { useEffect, useState } from 'react'
 import data from '../constants/data.js'
 import Tilth from '../services/sqlite/Tilth.js'
-import { router } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 
 
 const AddTilth = () => {
+  const navigation = useNavigation()
+
   const [selectedTilth, setSelectedTilth] = useState("")
   const [selectedGround, setSelectedGround] = useState("")
   const [date, setDate] = useState(new Date())
   const [tilthStartDate, setTilthStartDate] = useState(
-  date.getDate() + "/" 
+    (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + "/" 
    + (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "/" 
    + date.getFullYear()
   )
@@ -51,7 +53,11 @@ const AddTilth = () => {
         .then((item) => console.log(item))
         .catch((error) => console.log(error))
 
-      router.replace('home')
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'index' }],
+      });
+
       alert("Cultura cadastrada com sucesso!")
     }).catch((error) => {
       console.log(error);
@@ -130,7 +136,7 @@ const AddTilth = () => {
                   onChange={(event, value)=>{
                     setShowPicker(Platform.OS === 'ios' ? true: false)
                     setDate(value)
-                    setTilthStartDate(value.getDate() + "/" + 
+                    setTilthStartDate((value.getDate() < 10 ? "0" + value.getDate() : value.getDate()) + "/" + 
                     (value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : (value.getMonth() + 1))
                      + "/" + value.getFullYear())
                   }}

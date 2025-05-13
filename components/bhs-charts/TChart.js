@@ -99,7 +99,7 @@ const BHSTChart = ({data}) => {
                         <Line
                             strokeWidth={3}
                             points={points.valor}
-                            color="red"
+                            color="blue"
                             animate={{ type: "timing", duration: 300 }}
                         />
                     )

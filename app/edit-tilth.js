@@ -4,12 +4,14 @@ import  RNDateTimePicker  from '@react-native-community/datetimepicker'
 import { useEffect, useState } from 'react'
 import data from '../constants/data.js'
 import Tilth from '../services/sqlite/Tilth.js'
-import { router, useLocalSearchParams } from 'expo-router'
+import { Stack, router, useLocalSearchParams, useNavigation } from 'expo-router'
 
 
 const EditTilth = () => {
   const params = useLocalSearchParams()
   const key = params.key
+
+  const navigation = useNavigation()
 
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -79,9 +81,13 @@ const EditTilth = () => {
       tilthType: selectedTilth,
       tilthStartDate: tilthStartDate,
       groundType: selectedGround
-    }).then((rows) => {
-        router.replace('home')
+    }).then(() => {
         alert("Cultura atualizada com sucesso!")
+
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'index' }],
+        });
     }).catch((error) => {
       console.log(error);
     })
@@ -123,13 +129,15 @@ const EditTilth = () => {
   if(!isLoaded){
     return(
         <View className='bg-lighterblue w-full w-full'>
-            <ActivityIndicator size='large'/>
+          <Stack.Screen options={{title: 'Editar a cultura'}}/>
+          <ActivityIndicator size='large'/>
         </View>
     )
   }
 
   return (
     <View className='w-full h-full items-center bg-lighterblue'>
+      <Stack.Screen options={{title: 'Editar a cultura: ' + tilthTypeDb, headerTitleStyle:{fontSize: 10}}}/>
         <View className='mt-10'>
           <View>
             <View className='h-fit w-fit'>
